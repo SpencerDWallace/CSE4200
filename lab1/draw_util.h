@@ -1,0 +1,2 @@
+#define SCREENWIDTH 1280.0
+#define SCREENHEIGHT 720.0
