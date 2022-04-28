@@ -1,0 +1,47 @@
+#pragma once
+
+#include <vector>
+#include "utilities.h"
+#include "playercontroller.h"
+
+class GameController;
+
+class Snake: public PlayerController{
+  friend class GameController;
+
+public:
+  Snake(){score = 0;};
+
+  Snake(const Vector2D initialPosition, const Direction initialDirection, Vector2D* MapSize)
+  {
+    score = 0;
+    body.push_back(initialPosition); direction = initialDirection; MapSpace = MapSize;
+  }
+  std::vector<Vector2D> body;
+
+protected:
+  int score;	
+
+public:
+
+  int GetScore() {return score;};
+  void IncreaseScore() {score++;};
+  void ResetScore() {score = 0;};
+ 
+  virtual int Move() override{
+    BodyFollow(); //call before updating head
+    return PlayerController::Move();
+  };
+  
+protected:
+  void BodyFollow()
+  {
+    for(int i = body.size()-1; i > 0; i--)
+	body[i] = body[i-1];
+  };
+
+  void Tick(){
+    PlayerController::Move();
+  };
+  
+};

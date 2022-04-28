@@ -1,0 +1,30 @@
+snake
+
+array of snake body (squares)
+
+snake is just map?? empty or filled
+snake has a direction, current head location,
+direction can be up, down, left, right
+movement is mapped to 2D, 
+since only 4 directions, directions is enumerable: LEFT,RIGHT,UP,DOWN
+map has a set width.
+DOWN = (currentPositionIndex + width)%mapSize //handles wrapping
+UP = (currentPositionIndex - width)%mapSize //handles wrapping
+RIGHT = (currentPositionIndex )
+array
+{
+	1,1,1,1,1,1,1,1,
+	1,0,0,0,0,0,0,1,
+	1,0,0,0,0,0,0,1,
+	1,0,0,0,0,0,0,1,
+	1,0,0,0,0,0,0,1,
+	1,0,0,0,0,0,0,1,
+	1,0,0,0,0,0,0,1,
+	1,1,1,1,1,1,1,1  = 8x8 current = 62 + 8 => 70%64 = 6
+
+				current = 63 + 1 => 64
+				if(nextPos%8 == 0) nextPos-=8;
+				if(current%8 == 0) nextPos = current+8
+				current = 56 - 1 = 55 
+}
+546
