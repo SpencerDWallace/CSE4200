@@ -5,6 +5,8 @@
 #include <math.h>
 #include "utilities.h"
 
+class PlayerController;
+
 class Raycast{
 public:
 
@@ -13,6 +15,7 @@ public:
     
 //protected:
 
+  PlayerController* player;
   Vector2D* position;
   Vector2D* movement;
   float lookAngle;
@@ -29,26 +32,15 @@ public:
 
   void updateMovement();
 
-  void lookUp(){
-    movement->SetPosition(0,-1);
-  };
-
-  void lookDown(){
-    movement->SetPosition(0,1);
-  };
-
-  void lookLeft(){
-    movement->SetPosition(-1,0);
-  };
-
-  void lookRight(){
-    movement->SetPosition(1,0);
-  };
+  void lookUp();
   
-  void SetLookDirection(Direction newLookDirection) {
-    lookDirection = newLookDirection;
-    updateMovement();
-  };
+  void lookDown();
+  
+  void lookLeft();
+  
+  void lookRight();
+  
+  void SetLookDirection(Direction newLookDirection);
 
   void drawMap2D();
 

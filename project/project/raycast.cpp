@@ -1,4 +1,5 @@
 #include "raycast.h"
+#include "playercontroller.h"
 #include <cstdio>
 
 Raycast::Raycast()
@@ -25,6 +26,30 @@ void Raycast::Tick()
 //  printf("made it from drawRays\n");
 }
 
+void Raycast::lookUp(){
+  movement->SetPosition(0,-1);
+  lookAngle = 90.f;
+}
+
+void Raycast::lookDown(){
+  movement->SetPosition(0,1);
+  lookAngle = 270.f;
+}
+
+void Raycast::lookLeft(){
+  movement->SetPosition(-1,0);
+  lookAngle = 180.f;
+}
+
+void Raycast::lookRight(){
+  movement->SetPosition(1,0);
+  lookAngle = 0.f;
+}
+
+void Raycast::SetLookDirection(Direction newLookDirection) {
+  lookDirection = newLookDirection;
+  updateMovement();
+}
 
 void Raycast::updateMovement(){
   switch(lookDirection){
@@ -47,7 +72,7 @@ void Raycast::drawMap2D()
     {
       for(x=0;x<mapSpace->x;x++)
 	{
-	  if(map[y*mapSpace->x+x]==1){ glColor3f(1,1,1);} else{ glColor3f(0,0,0);}
+	  if(map[y*(int)mapSpace->x+x]==1){ glColor3f(1,1,1);} else{ glColor3f(0,0,0);}
 	  xo=x*mapS; yo=y*mapS;
 	  glBegin(GL_QUADS);
 	  glVertex2i( 0   +xo+1, 0   +yo+1);
@@ -61,18 +86,32 @@ void Raycast::drawMap2D()
 
 void Raycast::drawPlayer2D()
 {
+//  Vector2D playerPosition = player->GetPosition();
   float px = position->x*mapS; float py = position->y*mapS;
-  float pdx = movement->x - px; float pdy = movement->y - py;
+  float pdx = (player->GetNextPosition().x - position->x)*mapS;
+  float pdy = (player->GetNextPosition().y - position->y)*mapS;
+  //  float pdx = playerPosition.x - player->GetNextPosition().x;
+  //float pdy = playerPosition.y - player->GetNextPosition().y;
+  //  float px = position->x*mapS; float py = position->y*mapS;
+  //  float pdx = position->x; float pdy = movement->y*mapS;
+  //  float pdx = movement->x*moveAmount; float pdy = movement->y*moveAmount;
+  //  float pdx = movement->x - px; float pdy = movement->y - py;
   glColor3f(1,1,0);   glPointSize(8);    glLineWidth(4);
   glBegin(GL_POINTS); glVertex2i(px,py); glEnd();
-  glBegin(GL_LINES);  glVertex2i(px,py); glVertex2i(px+pdx*20,py+pdy*20); glEnd();
+  glBegin(GL_LINES);  glVertex2i(px,py); glVertex2i(px+pdx*2,py+pdy*2); glEnd();
 };
 
 
 void Raycast::drawRays2D()
 {
-  float px = position->x; float py = position->y;
-  float pdx = movement->x - px; float pdy = movement->y - py;
+  Vector2D playerPosition = player->GetPosition();
+  float px = position->x*mapS; float py = position->y*mapS;
+  float pdx = (player->GetNextPosition().x - position->x)*mapS;
+  float pdy = (player->GetNextPosition().y - position->y)*mapS;
+  //float moveAmount = 0.001;
+  //float px = position->x; float py = position->y;
+  //float pdx = movement->x*moveAmount; float pdy = movement->y*moveAmount;
+  //  float pdx = movement->x - px; float pdy = movement->y - py;
   
   glColor3f(0,1,1); glBegin(GL_QUADS); glVertex2i(526,  0); glVertex2i(1006,  0); glVertex2i(1006,160); glVertex2i(526,160); glEnd();
   glColor3f(0,0,1); glBegin(GL_QUADS); glVertex2i(526,0); glVertex2i(1006,0); glVertex2i(1006,screenSize->y); glVertex2i(526,screenSize->y); glEnd();

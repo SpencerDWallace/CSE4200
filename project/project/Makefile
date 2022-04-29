@@ -4,11 +4,11 @@
 PROG	= main
 LINKS = raycast.cpp playercontroller.cpp gamecontroller.cpp snake.cpp
 CFLAGS	= -w -s -O2 -ansi -DSHM
-XLIBS	= -lX11 
+#XLIBS	= -lX11 
 LIBS	= -lglut -lGLU -lGL
-INCLS	= -I/usr/X11R/include 
+#INCLS	= -I/usr/X11R/include 
 #-I../../util
-LIBDIR	= -L/usr/X11/lib 
+#LIBDIR	= -L/usr/X11/lib 
 #source codes
 SRCS = $(PROG).cpp 
 #substitute .cpp by .o to obtain object filenames
@@ -19,10 +19,10 @@ OBJS = $(SRCS:.cpp=.o)
 #$@ evaluates to the target
 
 $(PROG): $(OBJS)
-	g++ -o $@ $(OBJS) $(LINKS)  $(LIBDIR) $(LIBS) $(XLIBS)
+	g++ -o $@ $(OBJS) $(LINKS) $(LIBS)
 
 $(OBJS): 
-	g++ -c  $*.cpp $(INCLS) 
+	g++ -c  $*.cpp
 
 clean:
 	rm $(OBJS) $(PROG)

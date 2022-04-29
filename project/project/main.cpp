@@ -26,16 +26,28 @@ GameController* gamecontroller = new GameController();
 
 void Tick()
 {
-  gamecontroller->Tick();
+  glutPostRedisplay();
 }
 
 void Buttons(unsigned char key,int x,int y)
 {
- // Tick();
-  if(key=='a') gamecontroller->playerSnake->SetLookDirection(Direction::LEFT); 
-  if(key=='d') gamecontroller->playerSnake->SetLookDirection(Direction::RIGHT); 
-  if(key=='w') gamecontroller->playerSnake->SetLookDirection(Direction::UP); 
-  if(key=='s') gamecontroller->playerSnake->SetLookDirection(Direction::DOWN); 
+  
+  if(key=='a')
+    {
+       gamecontroller->playerSnake->SetLookDirection(Direction::LEFT); 
+    }
+  if(key=='d') 
+    {
+       gamecontroller->playerSnake->SetLookDirection(Direction::RIGHT); 
+    }
+  if(key=='w') 
+    {
+       gamecontroller->playerSnake->SetLookDirection(Direction::UP); 
+    }
+  if(key=='s') 
+    {
+       gamecontroller->playerSnake->SetLookDirection(Direction::DOWN); 
+    }
   
   glutPostRedisplay();
 }
@@ -50,12 +62,12 @@ void init()
 
 void display()
 {
- glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
- Tick();
- //drawMap2D();
- //drawPlayer2D();
- //drawRays2D();
- glutSwapBuffers();
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  gamecontroller->Tick();
+  //drawMap2D();
+  //drawPlayer2D();
+  //drawRays2D();
+  glutSwapBuffers();
 }
 
 int main(int argc, char* argv[])

@@ -22,13 +22,17 @@ void Snake::BodyFollow()
 int Snake::Move()
 {
   BodyFollow(); //call before updating head
+  //  printf("made it from bodyfollow\n");
   return PlayerController::Move();
 }
 
 void Snake::Tick()
 {
-  printf("made it! snake\n");
+
+  //printf("made it! snake\n");
   PlayerController::Tick();
+  //printf("made it from pc tick\n");
   Snake::Move();
+  //printf("made it from snake move\n");
 }
 
