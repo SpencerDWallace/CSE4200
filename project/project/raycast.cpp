@@ -111,12 +111,15 @@ void Raycast::drawRays2D()
   float px = position->x*w + w/2; float py = position->y*w + w/2;
   int mapX = 32; int mapY = 32;
   int r,mx,my,mp,dof,side; float vx,vy,rx,ry,ra,xo,yo,disV,disH;
-  int fov = 120;
-  
-  ra=FixAng(lookAngle+(fov>>1));                                                              //ray set back 30 degrees
-  
-  for(r=0;r<fov;r++)
+  int fov = 64;
+  int LPA = 8;
+  ra=FixAng(lookAngle+(fov>>1)); //ray set back 30 degrees
+
+  float color[3];
+  float pie = 0;
+  for(r=0;r<(fov*LPA);r++)
     {
+      color[0] = color[1] = color[2] = 0.0;
       bool hit = false;
       //---Vertical---
       dof=0; side=0; disV=100000;
@@ -135,12 +138,20 @@ void Raycast::drawRays2D()
       
       
       if(hit){
-	if(map[mp] == 1)
+	if(map[mp] == 1){
+	  color[0] = color[1] = color[2] = 0.5;
 	  glColor3f(0.5,0.5,0.5);
-	else if(map[mp] == 2)
-	  glColor3f(0,0.8,0);
-	else if(map[mp] == 3)
+	}
+	else if(map[mp] == 2) {
+	  color[0] = color[2] = 0;
+	  color[1] = 0.8;
+	    glColor3f(0,0.8,0);
+	  }
+	else if(map[mp] == 3){
+	  color[1] = color[2] = 0.0;
+	  color[0] = 0.8;
 	  glColor3f(0.8,0,0);
+	}
       }
       
       hit = false;
@@ -162,23 +173,39 @@ void Raycast::drawRays2D()
       if(disV<disH){ rx=vx; ry=vy; disH=disV;}
       else{
 	if(hit){
-	  if(map[mp] == 1)
+	  if(map[mp] == 1){
+	    color[0] = color[1] = color[2] = 0.5;
 	    glColor3f(0.5,0.5,0.5);
-	  else if(map[mp] == 2)
+	  }
+	  else if(map[mp] == 2) {
+	    color[0] = color[2] = 0;
+	    color[1] = 0.8;
 	    glColor3f(0,0.8,0);
-	  else if(map[mp] == 3)
+	  }
+	  else if(map[mp] == 3){
+	    color[1] = color[2] = 0.0;
+	    color[0] = 0.8;
 	    glColor3f(0.8,0,0);
+	  }
 	}
       }
       //horizontal hit first
       //  glLineWidth(2); glBegin(GL_LINES); glVertex2i(px,py); glVertex2i(rx,ry); glEnd();//draw 2D ray
       
       int ca=FixAng(lookAngle-ra); disH=disH*cos(degToRad(ca));                            //fix fisheye
-      int lineH = (16*height/2)/(disH); if(lineH>height){ lineH=height;}                     //line height and limit
+      int lineH = (16*height)/(disH); if(lineH>height){ lineH=height;}                     //line height and limit
       int lineOff = (height>>1) - (lineH>>1);                                               //line offset
-      float lineWidth = 1 + ((int)(screenSize->x)>>1)/fov;
-      glLineWidth(lineWidth);glBegin(GL_LINES);glVertex2i(r*lineWidth+(width/2),lineOff);glVertex2i(r*lineWidth+(width/2),lineOff+lineH);glEnd();//draw vertical wall
+      float lineWidth = ((int)(screenSize->x)>>1)/(fov*LPA);
+      float shading = (height/lineH)/(PI*sin(pie));
+      pie += PI/(fov*LPA);// : pie -= PI/(fov*LPA); 
+      color[0] = color[0]/shading;
+      color[1] = color[1]/shading;
+      color[2] = color[2]/shading;
       
-      ra=FixAng(ra-1);                                                              //go to next ray
+      glColor3fv(color);
+
+      glLineWidth(lineWidth);glBegin(GL_LINES);glVertex2i(r*lineWidth+(width/2),lineOff);glVertex2i(r*lineWidth+(width/2),lineOff+lineH);glEnd();//draw vertical wall
+      float angleOffset = (float)fov/((float)fov*(float)LPA);
+      ra=FixAng(ra-angleOffset);                                                              //go to next ray
     }
 }//-----------------------------------------------------------------------------

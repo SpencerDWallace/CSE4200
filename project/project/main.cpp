@@ -7,8 +7,9 @@ Vector2D* screenDimensions = new Vector2D(1024,512);
 //-----------------------------MAP----------------------------------------------
 Vector2D* mapMatrix = new Vector2D(32,32);      //map matrix x,y
 const int mapS = mapMatrix->x*mapMatrix->y;      //map rectangle size
+bool paused = false;
 
-int map[] = 
+int map[] =
   { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
     1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
     1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
@@ -71,24 +72,33 @@ void Tick()
 
 void Buttons(unsigned char key,int x,int y)
 {
-  
-  if(key=='a')
+
+  if((int)key == 27)
+  {
+    exit(0);
+    return;
+  }
+
+  if(key == 'q')
+    paused = !paused;
+
+  else if(key=='a')
     {
-       gamecontroller->playerSnake->SetLookDirection(Direction::LEFT); 
+       gamecontroller->playerSnake->SetLookDirection(Direction::LEFT);
     }
-  if(key=='d') 
+  else if(key=='d')
     {
-       gamecontroller->playerSnake->SetLookDirection(Direction::RIGHT); 
+       gamecontroller->playerSnake->SetLookDirection(Direction::RIGHT);
     }
-  if(key=='w') 
+  else if(key=='w')
     {
-       gamecontroller->playerSnake->SetLookDirection(Direction::UP); 
+       gamecontroller->playerSnake->SetLookDirection(Direction::UP);
     }
-  if(key=='s') 
+  else if(key=='s')
     {
-       gamecontroller->playerSnake->SetLookDirection(Direction::DOWN); 
+       gamecontroller->playerSnake->SetLookDirection(Direction::DOWN);
     }
-  
+
   glutPostRedisplay();
 }
 
@@ -101,13 +111,15 @@ void init()
 
 void display()
 {
+  if(paused)
+    return;
   
   const double current_time = GetCurrentTime();
   if( ( current_time - last_render ) < frame_delay )
     return;
 
   last_render = current_time;
-  
+
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   gamecontroller->Tick();
   if(gamecontroller->gameover)
