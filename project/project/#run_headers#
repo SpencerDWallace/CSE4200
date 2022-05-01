@@ -1,0 +1,25 @@
+LINKS = raycast.h playercontroller.h gamecontroller.h snake.h
+CFLAGS	= -w -s -O2 -ansi -DSHM
+#XLIBS	= -lX11 
+LIBS	= -lglut -lGLU -lGL
+#INCLS	= -I/usr/X11R/include 
+#-I../../util
+#LIBDIR	= -L/usr/X11/lib 
+#source codes
+SRCS = $(PROG).cpp 
+#substitute .cpp by .o to obtain object filenames
+OBJS = $(SRCS:.cpp=.o) 
+#OBJS1 =  ../../util/util3D.o
+
+#$< evaluates to the target's dependencies, 
+#$@ evaluates to the target
+
+$(PROG): $(OBJS)
+	g++ -o $@ $(OBJS) $(LINKS) $(LIBS)
+
+$(OBJS): 
+	g++ -c  $*.cpp
+
+clean:
+	rm $(OBJS) $(PROG)
+

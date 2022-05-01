@@ -22,12 +22,17 @@ public:
   Snake* playerSnake;
   Direction playerDirection;
   Raycast* raycast;
+  bool gameover;
+  
 public:
 
   void StartGame(Vector2D* ScreenSize, int Map[], Vector2D* MapSpace);
   
   Snake* SpawnSnake();
 
+  void SpawnFruit();
+
   void Tick();
-  
+
+  void Restart();
 };

@@ -53,5 +53,26 @@ public:
 protected:
   virtual float degToRad(int a) { return a*M_PI/180.0;};
   virtual int FixAng(int a){ if(a>359){ a-=360;} if(a<0){ a+=360;} return a;};
+  virtual float distt(float a, float b)
+  {
+    return (sqrt(a*a + b*b));
+  }
 
+private:
+  float cosDeg(float angle)
+  {
+    return cos ( angle * PI / 180.0);
+  };
+  
+  float sinDeg(float angle)
+  {
+    return sin ( angle * PI / 180.0);
+  };
+  
+  float tanDeg(float angle)
+  {
+    return tan ( angle * PI / 180.0);
+  };
+
+  
 };

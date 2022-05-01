@@ -9,7 +9,11 @@ PlayerController::PlayerController()
 
 int PlayerController::IndexFromPosition()
 {
-  return (position->x + position->y*MapSpace->y);
+  int intX = (int)(position->x + 0.5);
+  int intY = (int)(position->y + 0.5);
+  int offset = (int)(MapSpace->x + 0.5);
+
+  return (intX + intY*offset);
 }
 
 Vector2D PlayerController::GetPosition()
@@ -26,18 +30,18 @@ Vector2D PlayerController::GetNextPosition()
 
   switch(direction)
     {
-    case UP: printf("nextpos up\n");nextPosition->MoveUp(MapSpace, moveAmount);
+    case UP: nextPosition->MoveUp(MapSpace, moveAmount);
       break;
-    case DOWN: printf("nextpos down\n");nextPosition->MoveDown(MapSpace, moveAmount);
+    case DOWN: nextPosition->MoveDown(MapSpace, moveAmount);
       break;
-    case LEFT: printf("nextpos left\n");nextPosition->MoveLeft(MapSpace, moveAmount);
+    case LEFT: nextPosition->MoveLeft(MapSpace, moveAmount);
       break;
-    case RIGHT: printf("nextpos right\n");nextPosition->MoveRight(MapSpace, moveAmount);
+    case RIGHT: nextPosition->MoveRight(MapSpace, moveAmount);
       break;
-    default: printf("nextpos default\n");
+    default: 
       break;
     }
-  printf("X is: %f | Y is: %f\n", nextPosition->x, nextPosition->y);
+  //  printf("X is: %f | Y is: %f\n", nextPosition->x, nextPosition->y);
   return *nextPosition;
 }
 
@@ -45,4 +49,34 @@ int PlayerController::Move()
 {
   *position = GetNextPosition();
   return IndexFromPosition();
+}
+
+void PlayerController::lookUp(){
+  movement->SetPosition(0,-1);
+}
+
+void PlayerController::lookDown(){
+  movement->SetPosition(0,1);
+}
+
+void PlayerController::lookLeft(){
+  movement->SetPosition(-1,0);
+}
+
+void PlayerController::lookRight(){
+  movement->SetPosition(1,0);
+}
+
+void PlayerController::updateMovement(){
+  switch(direction){
+  case UP: lookUp();
+    break;
+  case DOWN: lookDown();
+    break;
+  case LEFT: lookLeft();
+    break;
+  case RIGHT: lookRight();
+    break;
+  default: break;
+  }
 }

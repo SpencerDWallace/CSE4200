@@ -13,9 +13,10 @@ protected:
   Vector2D* MapSpace;
   Vector2D* position;
   Vector2D* nextPosition;
+  Vector2D* movement;
   Direction direction;
   Raycast* raycast;
-  float moveAmount = 0.1;
+  float moveAmount = 1;
  public:
 
   virtual Vector2D GetPosition();
@@ -30,8 +31,19 @@ protected:
     direction = newDirection;
     raycast->SetLookDirection(newDirection);
   };
+
+  virtual void updateMovement();
+  
+  virtual void lookUp();
+  
+  virtual void lookDown();
+  
+  virtual void lookLeft();
+  
+  virtual void lookRight();
   
   virtual void Tick(){
+
     raycast->Tick();
   }
 

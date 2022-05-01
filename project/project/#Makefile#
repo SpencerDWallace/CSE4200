@@ -19,10 +19,10 @@ OBJS = $(SRCS:.cpp=.o)
 #$@ evaluates to the target
 
 $(PROG): $(OBJS)
-	g++ -o $@ $(OBJS) $(LINKS)  $(LIBDIR) $(LIBS) $(XLIBS)
+	g++ -o $@$(OBJS) $(LINKS) $(LIBS)
 
 $(OBJS): 
-	g++ -c  $*.cpp $(INCLS) 
+	g++ -c  $*.cpp
 
 clean:
 	rm $(OBJS) $(PROG)

@@ -1,0 +1,133 @@
+/*********************************************************************************
+     r is the iteration count for the loop
+     mx is used for the column px is in, my is used for the row py is in,
+     mp is used for the block (index of map array) that the player is in,
+     dof is for depth of field, rx is ray's x, ry is ray's y, ra is ray's angle,
+     MS is the squared size of each block, disH and disV are the distance
+     the rays had to travel before hitting an object, set to 10000 as default, distFinal
+     is the lesser value between disH and disV.
+     hx and hy are the x and y coordinates of the ray checking for horizontal contact,
+     vx and vy are the x and y coordinates of the ray checking for vertical contact
+*********************************************************************************/
+float r, mx, my, mp, dof, rx, ry, ra, xOffset, yOffset, aTan, MS = mapSpace->x*mapSpace->y, numOfRays = 60;
+ra =  ((lookAngle - 30)*PI)/180.0;
+
+
+
+int disH = 10000, disV = 10000, distFinal, hx = px, vx = px, hy = py, vy = py;
+for(r = 0; r < numOfRays; r++) {
+  if(ra > 2*PI)
+    ra -= 2*PI;
+  if(ra <0)
+    ra += 2*PI;
+  
+  //checking horizontals
+  dof = 0;
+  aTan = -(1 / tan(ra));
+  // looking down
+  if (ra < PI && ra > 0) {
+    ry = (floor(py / MS) + 1) * MS +0.01;
+    rx = (py - ry) * aTan + px;
+    yOffset = MS;
+    xOffset = -1* yOffset * aTan;
+  }
+  //looking up
+  else if (ra > PI && ra < 2*PI) {
+    ry = floor(py / MS) * MS - 0.01;
+    rx = (py - ry) * aTan + px;
+    yOffset = -MS;
+    xOffset = -1 * yOffset * aTan;
+  } else {
+    rx = px;
+    ry = py;
+    dof = mapX;
+  }
+
+  if(rx >= MS*mapX || ry >= MS*mapX)
+    dof= mapC;
+  while (dof < mapX) {
+    mx = floor(rx / MS);
+    my = floor(ry / MS);
+    mp = floor(my * mapX + mx);
+    
+    if (mp >= 0 && mp < mapX * mapY && map[mp] > 0) {
+      //log("mp horiz is: " + mp);
+      hx = rx;
+      hy = ry;
+      disH = distt(px - hx, py - hy);
+      dof = mapX;
+    } else {
+      rx += xOffset;
+      ry += yOffset;
+      dof += 1;
+    }
+  }
+  
+  //checking verticals
+  nTan = -1 * (tan(ra));
+  dof = 0;
+  //looking left
+  if (ra > PI / 2 && ra < (3 * PI / 2)) {
+    rx = floor(px / MS) * MS - 0.001;
+    ry = (px - rx) * nTan + py;
+    xOffset = -MS;
+    yOffset = -xOffset * nTan;
+    
+  }
+  //looking right
+  else if (ra < PI / 2 || ra > (3 * PI / 2)) {
+    rx = floor(px / MS) * MS + MS;
+    ry = (px - rx) * nTan + py;
+    xOffset = MS;
+    yOffset = -xOffset * nTan;
+  } else {
+    rx = px;
+    ry = py;
+    dof = mapX;
+  }
+  while (dof < mapX) {
+    
+    mx = floor(rx / MS);
+    
+    my = floor(ry / MS);
+    mp = floor(my * mapX + mx);
+    if (mp >= 0 && mp < mapX * mapY && map[mp] > 0) {
+      vx = rx;
+      vy = ry;
+      disV = distt(px - vx, py - vy);
+      dof = mapX;
+    } else {
+      rx += xOffset;
+      ry += yOffset;
+      dof += 1;
+    }
+  }
+  
+  if (disV <= disH) {
+    rx = vx; ry = vy;
+    distFinal = disV;
+  } else if (disH < disV){
+    rx = hx;
+    ry = hy;
+    distFinal = disH;
+  }
+  
+  //Render 3D
+  float ca = ((lookAngle)*PI/180) - ra; if(ca < 0) ca += 2*PI; if (ca > 2*PI) ca -= 2*PI;
+  distFinal = distFinal*cos(ca);
+  float lineH = (MS*height)/distFinal; if(lineH > height) lineH = height;
+  float lineOffset = height/2 - lineH/2;
+
+  //r*lineWidth + screenSize->x/2, 0 | r*lineWidth + screenSize->x/2, screenSize->y
+  float lineWidth = (screenSize->x/(2*numOfRays));
+  rect(r*(screenSize->x/(numOfRays*2)), lineOffset, screenSize->x/(numOfRays*2), lineH);
+
+  ra += PI/180;
+  if(ra > 2*PI)
+    ra -= 2*PI;
+  if(ra <0)
+    ra += 2*PI;
+
+  disH = 10000, disV = 10000;
+  
+ }

@@ -3,6 +3,7 @@
 
 PROG	= main
 LINKS = raycast.cpp playercontroller.cpp gamecontroller.cpp snake.cpp
+HEADERS = utilities.h raycast.h snake.h playercontroller.h gamecontroller.h
 CFLAGS	= -w -s -O2 -ansi -DSHM
 #XLIBS	= -lX11 
 LIBS	= -lglut -lGLU -lGL
@@ -18,6 +19,8 @@ OBJS = $(SRCS:.cpp=.o)
 #$< evaluates to the target's dependencies, 
 #$@ evaluates to the target
 
+
+
 $(PROG): $(OBJS)
 	g++ -o $@ $(OBJS) $(LINKS) $(LIBS)
 
@@ -26,4 +29,8 @@ $(OBJS):
 
 clean:
 	rm $(OBJS) $(PROG)
+
+headers:
+	g++ $(HEADERS)
+
 
