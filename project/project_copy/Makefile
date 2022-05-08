@@ -1,0 +1,36 @@
+#sample Makefile for using OpenGL of Red Hat Linux 7.x
+#CS 420, Tong Yu, Fall 2002
+
+PROG	= main
+LINKS = raycast.cpp playercontroller.cpp gamecontroller.cpp snake.cpp
+HEADERS = utilities.h raycast.h snake.h playercontroller.h gamecontroller.h
+CFLAGS	= -w -s -O2 -ansi -DSHM
+#XLIBS	= -lX11 
+LIBS	= -lglut -lGLU -lGL
+#INCLS	= -I/usr/X11R/include 
+#-I../../util
+#LIBDIR	= -L/usr/X11/lib 
+#source codes
+SRCS = $(PROG).cpp 
+#substitute .cpp by .o to obtain object filenames
+OBJS = $(SRCS:.cpp=.o) 
+#OBJS1 =  ../../util/util3D.o
+
+#$< evaluates to the target's dependencies, 
+#$@ evaluates to the target
+
+
+
+$(PROG): $(OBJS)
+	g++ $(HEADERS) -o $@ $(OBJS) $(LINKS) $(LIBS)
+
+$(OBJS): 
+	g++ -c  $*.cpp
+
+clean:
+	rm $(OBJS) $(PROG)
+
+headers:
+	g++ $(HEADERS)
+
+
