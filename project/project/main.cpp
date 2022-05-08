@@ -98,6 +98,10 @@ void Buttons(unsigned char key,int x,int y)
     {
        gamecontroller->playerSnake->SetLookDirection(Direction::DOWN);
     }
+  else if(key=='e')
+    {
+      gamecontroller->raycast->debug = !gamecontroller->raycast->debug;
+    }
 
   glutPostRedisplay();
 }

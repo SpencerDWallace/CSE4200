@@ -14,7 +14,7 @@ public:
   Raycast(Vector2D* ScreenSize, int Map[], Vector2D* MapSpace);
     
 //protected:
-
+  bool debug;
   PlayerController* player;
   Vector2D* position;
   Vector2D* movement;

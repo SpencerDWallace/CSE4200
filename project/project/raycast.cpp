@@ -4,10 +4,11 @@
 
 Raycast::Raycast()
 {
-
+  debug = false;
 }
 
 Raycast::Raycast(Vector2D* ScreenSize, int Map[], Vector2D* MapSpace){
+  debug = false;
   screenSize = ScreenSize;
   map = Map;
   mapSpace = MapSpace;
@@ -76,12 +77,22 @@ void Raycast::drawMap2D()
 	    glColor3f(0,0,0);
 	  
 	  xo=x*width; yo=y*width;
-	  glBegin(GL_QUADS);
-	  glVertex2i( 0   +xo-1, 0   +yo-1);
-	  glVertex2i( 0   +xo-1, width+yo+1);
-	  glVertex2i( width+xo+1, width+yo+1);
-	  glVertex2i( width+xo+1, 0   +yo-1);
-	  glEnd();
+	  if(debug){
+	    glBegin(GL_QUADS);
+	    glVertex2i( 0   +xo+1, 0   +yo+1);
+	    glVertex2i( 0   +xo+1, width+yo-1);
+	    glVertex2i( width+xo-1, width+yo-1);
+	    glVertex2i( width+xo-1, 0   +yo+1);
+	    glEnd();
+	  }
+	  else{
+	    glBegin(GL_QUADS);
+	    glVertex2i( 0   +xo-1, 0   +yo-1);
+	    glVertex2i( 0   +xo-1, width+yo+1);
+	    glVertex2i( width+xo+1, width+yo+1);
+	    glVertex2i( width+xo+1, 0   +yo-1);
+	    glEnd();
+	  }
 	}
     }
 };
@@ -104,8 +115,8 @@ void Raycast::drawRays2D()
 {
   int height = screenSize->y;
   int width = screenSize->x;
-  glColor3f(0.1,0.1,0.1); glBegin(GL_QUADS); glVertex2i(width>>1,  0); glVertex2i(width,  0); glVertex2i(width,height>>1); glVertex2i(width>>1,height>>1); glEnd();
-  glColor3f(0.2,0.2,0.2); glBegin(GL_QUADS); glVertex2i(width>>1,height>>1); glVertex2i(width,height>>1); glVertex2i(width,height); glVertex2i(width>>1,height); glEnd();
+  glColor3f(0.3,0.3,0.3); glBegin(GL_QUADS); glVertex2i(width>>1,  0); glVertex2i(width,  0); glVertex2i(width,height>>1); glVertex2i(width>>1,height>>1); glEnd();
+  glColor3f(0.4,0.4,0.4); glBegin(GL_QUADS); glVertex2i(width>>1,height>>1); glVertex2i(width,height>>1); glVertex2i(width,height); glVertex2i(width>>1,height); glEnd();
   
   int w = (((int)(screenSize->x))>>1)/mapSpace->x;
   float px = position->x*w + w/2; float py = position->y*w + w/2;
@@ -175,7 +186,7 @@ void Raycast::drawRays2D()
 	if(hit){
 	  if(map[mp] == 1){
 	    color[0] = color[1] = color[2] = 0.5;
-	    glColor3f(0.5,0.5,0.5);
+	    glColor3f(0.8,0.8,0.8);
 	  }
 	  else if(map[mp] == 2) {
 	    color[0] = color[2] = 0;
@@ -190,14 +201,16 @@ void Raycast::drawRays2D()
 	}
       }
       //horizontal hit first
-      //  glLineWidth(2); glBegin(GL_LINES); glVertex2i(px,py); glVertex2i(rx,ry); glEnd();//draw 2D ray
+      if(debug){
+	glLineWidth(2); glBegin(GL_LINES); glVertex2i(px,py); glVertex2i(rx,ry); glEnd();//draw 2D ray
+      }
       
       int ca=FixAng(lookAngle-ra); disH=disH*cos(degToRad(ca));                            //fix fisheye
       int lineH = (16*height)/(disH); if(lineH>height){ lineH=height;}                     //line height and limit
       int lineOff = (height>>1) - (lineH>>1);                                               //line offset
       float lineWidth = ((int)(screenSize->x)>>1)/(fov*LPA);
       float shading = (height/lineH)/(PI*sin(pie));
-      pie += PI/(fov*LPA);// : pie -= PI/(fov*LPA); 
+      pie += PI/(fov*LPA);
       color[0] = color[0]/shading;
       color[1] = color[1]/shading;
       color[2] = color[2]/shading;
