@@ -22,7 +22,7 @@ OBJS = $(SRCS:.cpp=.o)
 
 
 $(PROG): $(OBJS)
-	g++ -o $@ $(OBJS) $(LINKS) $(LIBS)
+	g++ $(HEADERS) -o $@ $(OBJS) $(LINKS) $(LIBS)
 
 $(OBJS): 
 	g++ -c  $*.cpp
