@@ -15,6 +15,8 @@ public:
     
 //protected:
   bool debug;
+  bool defaultLighting;
+  
   PlayerController* player;
   Vector2D* position;
   Vector2D* movement;

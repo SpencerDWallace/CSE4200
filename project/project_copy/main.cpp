@@ -52,7 +52,7 @@ double GetCurrentTime()
  return std::chrono::duration_cast<Duration>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
 }
 
-const double frame_delay = 1.0 / 10.0; // 10 FPS
+double frame_delay = 1.0 / 10.0; // 10 FPS
 double last_render = 0;
 
 void Restart()
@@ -101,6 +101,24 @@ void Buttons(unsigned char key,int x,int y)
   else if(key=='e')
     {
       gamecontroller->raycast->debug = !gamecontroller->raycast->debug;
+    }
+  else if(key=='f')
+    {
+      gamecontroller->raycast->defaultLighting = !gamecontroller->raycast->defaultLighting;
+    }
+  else if(key=='1')
+    {
+      if(frame_delay < 0.5)
+	frame_delay += 0.05;
+      if(frame_delay > 0.5)
+	frame_delay = 0.5;
+    }
+  else if(key=='2')
+    {
+      if(frame_delay > 1.0/30.0)
+	frame_delay -= 0.05;
+      if(frame_delay < 1.0/30.0)
+	frame_delay = 1.0/30.0;
     }
 
   glutPostRedisplay();

@@ -5,10 +5,12 @@
 Raycast::Raycast()
 {
   debug = false;
+  defaultLighting = false;
 }
 
 Raycast::Raycast(Vector2D* ScreenSize, int Map[], Vector2D* MapSpace){
   debug = false;
+  defaultLighting = false;
   screenSize = ScreenSize;
   map = Map;
   mapSpace = MapSpace;
@@ -97,7 +99,7 @@ void Raycast::drawMap2D()
     }
 };
 
-
+/*
 void Raycast::drawPlayer2D()
 {
   int w = (((int)(screenSize->x))>>1)/mapSpace->x;
@@ -110,6 +112,7 @@ void Raycast::drawPlayer2D()
   glColor3f(0,0.8,0.8);
   glBegin(GL_LINES);  glVertex2i(px,py); glVertex2i(px+pdx,py+pdy); glEnd();
 };
+*/
 
 void Raycast::drawRays2D()
 {
@@ -211,10 +214,13 @@ void Raycast::drawRays2D()
       float lineWidth = ((int)(screenSize->x)>>1)/(fov*LPA);
       float shading = (height/lineH)/(PI*sin(pie));
       pie += PI/(fov*LPA);
-      color[0] = color[0]/shading;
-      color[1] = color[1]/shading;
-      color[2] = color[2]/shading;
       
+      if(!defaultLighting){
+	color[0] = color[0]/shading;
+	color[1] = color[1]/shading;
+	color[2] = color[2]/shading;
+      }
+  
       glColor3fv(color);
 
       glLineWidth(lineWidth);glBegin(GL_LINES);glVertex2i(r*lineWidth+(width/2),lineOff);glVertex2i(r*lineWidth+(width/2),lineOff+lineH);glEnd();//draw vertical wall
